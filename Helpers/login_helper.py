@@ -5,6 +5,8 @@ import re
 import random
 from Helpers.email import Email
 from Model import rpg_database as db
+from validate_email import validate_email
+
 
 # For Creating Accounts
 def is_valid_new_account_info(username, email, password):
@@ -27,11 +29,13 @@ def is_available_email(email):
     return False
 
 def is_valid_new_email(email):
-    rx =  r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b' # from https://www.geeksforgeeks.org/check-if-email-ress-valid-or-not-in-python/
-    if re.fullmatch(rx, email):
-        return True
-    print("not a valid email")
-    return False
+    is_valid = validate_email(
+    email_address = email,
+    check_format = True,
+    check_blacklist = False,
+    check_dns = False,
+    check_smtp = False)
+    return is_valid
 
 def is_valid_new_password(password):
     pass
@@ -52,25 +56,29 @@ def validate_email_and_password(email, password):
 
 
 # Retrieve Current User Info
-def get_registered_player_via_username(username): #createaccount_login_forgot_password helpers
-    print("get_registered_player_via_username")
+def get_registered_player_via_username(username):
     player = db.find_players_with_feature("username", username)
-    db.print_player_table()
-    if player is None:
+    player_id = get_player_id(player)
+    return player_id
+
+def get_registered_player_via_email(email):
+    player = db.find_players_with_feature("email", email)
+    player_id = get_player_id(player)
+    return player_id
+
+def get_player_id(player):
+    if len(player) == 0:
         return 0
     player_id = player[0][0]
     return player_id
 
-def get_registered_player_via_email(email): #createaccount_login_forgot_password helpers
-    return True
-
-def is_correct_password_for_current_player(CURRENT_PLAYER, password): #createaccount_login_forgot_password helpers
+def is_correct_password_for_current_player(CURRENT_PLAYER, password):
     if CURRENT_PLAYER.player_account.password == password:
         return True
     else:
         return False
 
-def email_passcode_1(players): #createaccount_login_forgot_password helpers
+def email_passcode_1(players):
     receiver_address = str(raw_input("Please type your email >"))
     player = get_registered_player_via_email(receiver_address, players)
     if player != 0:
