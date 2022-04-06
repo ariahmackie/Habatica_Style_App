@@ -22,7 +22,24 @@ class TestLoginHelper(unittest.TestCase):
 
 
         def test_is_valid_new_account_info(self):
-            pass
+            bad_username = "adam" # already in database
+            good_username = "ben"
+            bad_email = "sam@gmail.com" # already in database
+            bad_email2 = "aabdefef" #not a valid email
+            good_email = "aaa@gmail.com"
+            bad_password = "abc"
+            good_password = "abcdefghij1"
+            is_valid = lh.is_valid_new_account_info(bad_username, good_email, good_password)
+            self.assertEqual(is_valid, False, "username already in database")
+            is_valid = lh.is_valid_new_account_info(good_username, bad_email, good_password)
+            self.assertEqual(is_valid, False, "email already in database")
+            is_valid = lh.is_valid_new_account_info(good_username, bad_email2, good_password)
+            self.assertEqual(is_valid, False, "not valid email format")
+            is_valid = lh.is_valid_new_account_info(good_username, good_email, bad_password)
+            self.assertEqual(is_valid, False, "password is wrong")
+            is_valid = lh.is_valid_new_account_info(good_username, good_email, good_password)
+            self.assertEqual(is_valid, True, "password is good")
+
 
         def test_is_available_username(self):
             is_available = lh.is_available_username("adam") # should not be available
@@ -31,7 +48,6 @@ class TestLoginHelper(unittest.TestCase):
             is_available = lh.is_available_username("May")  # should be available
             expected = True
             self.assertEqual(is_available, expected, "May is an available username")
-
 
         def test_is_available_email(self):
             is_available = lh.is_available_email("adam@gmail.com")
@@ -52,7 +68,16 @@ class TestLoginHelper(unittest.TestCase):
             self.assertEqual(is_valid, True, "is valid")
 
         def test_is_valid_new_password(self):
-            pass
+            is_valid = lh.is_valid_new_password("a")
+            self.assertEqual(is_valid, False, "too short")
+            is_valid = lh.is_valid_new_password("abcdefghij")
+            self.assertEqual(is_valid, False, "password needs a number")
+            is_valid = lh.is_valid_new_password("123343535")
+            self.assertEqual(is_valid, False, "password needs letters")
+            is_valid = lh.is_valid_new_password("abcdefghi1")
+            self.assertEqual(is_valid, True, "password needs 8 or more charcters and must contain numbers ")
+
+
 
         def test_validate_email_and_password(self):
             pass
