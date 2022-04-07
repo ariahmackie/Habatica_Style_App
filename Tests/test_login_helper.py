@@ -17,8 +17,8 @@ class TestLoginHelper(unittest.TestCase):
 
         def set_up_existing_players(self):
             db.create_player_table()
-            player1 = Player("adam@gmail.com", "adam", "abc123")
-            player2 = Player("sam@gmail.com", "sam", "abc123")
+            player1 = Player("adam@gmail.com", "adam", "abcdefghi123")
+            player2 = Player("sam@gmail.com", "sam", "abcdefghi123")
 
 
         def test_is_valid_new_account_info(self):
@@ -78,9 +78,17 @@ class TestLoginHelper(unittest.TestCase):
             self.assertEqual(is_valid, True, "password needs 8 or more charcters and must contain numbers ")
 
 
-
         def test_validate_email_and_password(self):
-            pass
+            good_email = "sam@gmail.com"
+            bad_email = "bob@gmail.com" # not in database
+            good_password = "abcdefghi123" #sam's password
+            bad_password = "abcdefgh123" #typo
+            is_valid = lh.validate_email_and_password(good_email, bad_password )
+            self.assertEqual(is_valid, False, "not a matching password")
+            is_valid = lh.validate_email_and_password(bad_email, good_password)
+            self.assertEqual(is_valid, False, "email is not in database")
+            is_valid = lh.validate_email_and_password(good_email, good_password)
+            self.assertEqual(is_valid, True, "password matches user email")
 
         def test_get_registered_player_via_username(self):
             player_id = lh.get_registered_player_via_username("adam")
