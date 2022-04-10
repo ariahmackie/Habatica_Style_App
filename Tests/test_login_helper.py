@@ -77,7 +77,6 @@ class TestLoginHelper(unittest.TestCase):
             is_valid = lh.is_valid_new_password("abcdefghi1")
             self.assertEqual(is_valid, True, "password needs 8 or more charcters and must contain numbers ")
 
-
         def test_validate_email_and_password(self):
             good_email = "sam@gmail.com"
             bad_email = "bob@gmail.com" # not in database
@@ -102,7 +101,6 @@ class TestLoginHelper(unittest.TestCase):
             non_existing_player_id = lh.get_registered_player_via_email("john@gmail.com")
             expected_id = 0
             self.assertEqual(non_existing_player_id, expected_id, "should return 0 when the player email does not exist")
-
 
         def test_is_correct_password_for_current_player(self):
             pass
