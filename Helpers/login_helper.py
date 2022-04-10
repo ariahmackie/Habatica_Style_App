@@ -4,7 +4,10 @@ from Helpers.email import Email
 from Model import rpg_database as db
 from validate_email import validate_email
 
+
 # for Creating New Accounts ------------------------------------------
+
+
 def is_valid_new_account_info(username: str, email: str, password: str) -> bool:
     """Validate username, email, and password are not taken and are formatted correctly."""
     if is_available_username(username):
@@ -16,16 +19,18 @@ def is_valid_new_account_info(username: str, email: str, password: str) -> bool:
 def is_available_username(username: str) -> bool:
     """Return True if username is not taken (not in the database)."""
     player = get_registered_player_via_username(username)
-    if player == 0:
+    if player is None:
         return True
     return False
+
 
 def is_available_email(email: str) -> bool:
     """Return True if email is not taken (not in the database)."""
     player = get_registered_player_via_email(email)
-    if player == 0:
+    if player is None:
         return True
     return False
+
 
 def is_valid_new_email(email: str) -> bool:
     """Return True if email if formatted correctly."""
@@ -36,6 +41,7 @@ def is_valid_new_email(email: str) -> bool:
         check_dns = False,
         check_smtp = False)
     return is_valid
+
 
 def is_valid_new_password(password: str) -> bool:
     """Password must be atleast 8 characters long and have letters and numbers."""
@@ -51,18 +57,22 @@ def is_valid_new_password(password: str) -> bool:
         return True
     return False
 
-def invalid_email_warning(error_list: list) -> list:
+
+def invalid_username_warning(error_list: list) -> str:
+    """Return a string about what is wrong with username."""
     pass
 
-def invalid_username_warning(error_list: list) -> list:
-    pass
 
-def invalid_password_warning(error_list: list) -> list:
+def invalid_password_warning(error_list: list) -> str:
+    """Return a string about what is wrong with password."""
     pass
 
 
 # For Logging into Existing Accounts ------------------------------------------
+
+
 def validate_email_and_password(email: str, password: str) -> bool:
+    """Return True if email and password match in the database."""
     player = get_registered_player_via_email(email)
     if player != 0:
         print(player)
@@ -73,32 +83,29 @@ def validate_email_and_password(email: str, password: str) -> bool:
     else:
         print("alert %s Is not registered email." % (email))
 
+
 def is_correct_password_for_current_player(player: tuple, password: str) -> bool:
     pass
 
+
 # Retrieve User Account Info from Database -------
-def get_registered_player_via_username(username) :
-    player = db.find_players_with_feature("username", username)
-    player_id = get_player_id(player)
-    return player_id
 
-def get_registered_player_via_email(email: str) -> tuple:
-    player = db.find_players_with_feature("email", email)
-    player_id = get_player_id(player)
-    return player_id
 
-def get_player_id(player):
-    if len(player) == 0:
-        return 0
-    player_id = player[0][0]
-    return player_id
+def get_registered_player_via_username(username: str):
+    player = db.find_player_with_feature("username", username)
+    return player
+
+
+def get_registered_player_via_email(email: str):
+    player = db.find_player_with_feature("email", email)
+    return player
 
 
 # Handle forgotten password-----------------------
 def email_passcode_1(players):
     receiver_address = str(raw_input("Please type your email >"))
     player = get_registered_player_via_email(receiver_address)
-    if player != 0:
+    if player is not None:
         global CURRENT_PLAYER
         CURRENT_PLAYER = player
         passcode = generate_five_digit_passcode()

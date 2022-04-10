@@ -17,7 +17,7 @@ class Player:
         self.intelligence = 0
         self.charisma = 0
         db.add_new_player(email, username, password)
-        
+
     def add_to_experience(self, task):
         self.experience += int(task.taskvalue)
         if self.experience >= 15:
@@ -71,7 +71,6 @@ class Account:
 
 
 class Backpack():
-
     def __init__(self):
         self.items = {}
 
@@ -135,7 +134,7 @@ class Task:
         self.taskvalue = taskvalue
 
     def make_task_repeatible(self):
-        self.isrepeatable = True
+        self.is_repeatable = True
 
     def display_task(self):
-        return [self.description, self.duedate, self.taskvalue, self.isrepeatable]
+        return [self.description, self.duedate, self.taskvalue, self.is_repeatable]

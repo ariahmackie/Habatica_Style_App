@@ -35,10 +35,10 @@ def get_player(id):
     player = cursor.fetchone()
     return player
 
-def find_players_with_feature(feature_type, value):
+def find_player_with_feature(feature_type, value):
     cursor.execute("SELECT * From player where %s=?" % feature_type, (value,))
-    players = cursor.fetchall()
-    return players
+    player = cursor.fetchone()
+    return player
 
 
 def get_value_from_player(value_type, player_id):
@@ -152,7 +152,6 @@ dessert_tuples = [("chocolate chip cookies", 3, "dessert"), ("apple pie", 2, "de
 meal_tuples = [("ramen", 1, "meal"), ("sushi", 1, "meal"), ("chow mein", 2, "meal"), ("orange chicken", 4, "meal"), ("roast chicken", 2, "meal"), ("rice", 3, "meal"), ("taco", 4, "meal"), ("roast beef", 3, "meal"), ("baked potato", 2, "meal"), ("enchilada", 3, "meal"), ("sandwich", 2, "meal")]
 
 food_tuples = fruit_tuples + vegetable_tuples + dessert_tuples + meal_tuples
-print(len(fruit_tuples) + len(vegetable_tuples) + len(dessert_tuples) + len(meal_tuples))
 
 def create_stock_table():
     cursor.execute('''CREATE TABLE Stock(
