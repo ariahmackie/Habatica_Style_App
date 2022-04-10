@@ -78,7 +78,6 @@ class TestLoginHelper(unittest.TestCase):
             is_valid = lh.is_valid_new_password("abcdefghi1")
             self.assertEqual(is_valid, True, "password needs 8 or more charcters and must contain numbers ")
 
-
         def test_validate_email_and_password(self):
             good_email = "sam@gmail.com"
             bad_email = "bob@gmail.com" # not in database
