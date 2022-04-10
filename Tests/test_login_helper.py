@@ -5,8 +5,9 @@ parent_directory = os.path.dirname(current_directory)
 sys.path.append(parent_directory)
 
 
+
 import unittest
-from Helpers import login_helper as lh
+import Helpers.login_helper as lh
 import Model.rpg_database as db
 from Model.player import Player
 
@@ -20,7 +21,6 @@ class TestLoginHelper(unittest.TestCase):
             player1 = Player("adam@gmail.com", "adam", "abcdefghi123")
             player2 = Player("sam@gmail.com", "sam", "abcdefghi123")
 
-
         def test_is_valid_new_account_info(self):
             bad_username = "adam" # already in database
             good_username = "ben"
@@ -28,7 +28,7 @@ class TestLoginHelper(unittest.TestCase):
             bad_email2 = "aabdefef" #not a valid email
             good_email = "aaa@gmail.com"
             bad_password = "abc"
-            good_password = "abcdefghij1"
+            good_password = "abcdefghij123"
             is_valid = lh.is_valid_new_account_info(bad_username, good_email, good_password)
             self.assertEqual(is_valid, False, "username already in database")
             is_valid = lh.is_valid_new_account_info(good_username, bad_email, good_password)
@@ -68,6 +68,7 @@ class TestLoginHelper(unittest.TestCase):
             self.assertEqual(is_valid, True, "is valid")
 
         def test_is_valid_new_password(self):
+            '''passwords must be atleast 8 characters and have a number and a letter'''
             is_valid = lh.is_valid_new_password("a")
             self.assertEqual(is_valid, False, "too short")
             is_valid = lh.is_valid_new_password("abcdefghij")
@@ -102,7 +103,6 @@ class TestLoginHelper(unittest.TestCase):
             non_existing_player_id = lh.get_registered_player_via_email("john@gmail.com")
             expected_id = 0
             self.assertEqual(non_existing_player_id, expected_id, "should return 0 when the player email does not exist")
-
 
         def test_is_correct_password_for_current_player(self):
             pass
