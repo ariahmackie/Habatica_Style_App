@@ -1,14 +1,19 @@
+import os
+import sys
+current_directory = os.getcwd()
+parent_directory = os.path.dirname(current_directory)
+sys.path.append(parent_directory)
+
+
 import unittest
-import rpg_database as rpg
+from Model import rpg_database as rpg
 
 class TestPlayerTable(unittest.TestCase):
     def setUp(self):
+        print("===================================")
         rpg.drop_all_tables()
-
-
-    def tearDown(self):
-        pass
-
+        current_test = self.id().split('.')[-1]
+        print("Current Test:", current_test)
 
     def set_up_player(self):
         rpg.create_player_table()
@@ -35,12 +40,11 @@ class TestPlayerTable(unittest.TestCase):
         self.assertEqual(expected_tuple, actual_tuple, "tuples should be the same")
         self.drop_tables()
 
-    def test_find_players_with_feature(self):
+    def test_find_player_with_feature(self):
         self.set_up_player()
-        actual_person = rpg.find_players_with_feature("username", "Ashley")  # search a name that isn't in the database
+        actual_person = rpg.find_player_with_feature("username", "Ashley")  # search a name that isn't in the database
         expected_person = None
         self.assertEqual(actual_person, expected_person, "should return nothing because 'Ashley' is not in the database")
-        
 
     def test_get_value_from_player(self):
         self.set_up_player()

@@ -13,13 +13,16 @@ from Model.player import Player
 
 class TestLoginHelper(unittest.TestCase):
         def setUp(self):
+            print("==========================")
             db.drop_all_tables()
             self.set_up_existing_players()
+            
 
         def set_up_existing_players(self):
             db.create_player_table()
             player1 = Player("adam@gmail.com", "adam", "abcdefghi123")
             player2 = Player("sam@gmail.com", "sam", "abcdefghi123")
+
 
         def test_is_valid_new_account_info(self):
             bad_username = "adam" # already in database
