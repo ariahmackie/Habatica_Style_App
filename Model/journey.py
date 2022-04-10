@@ -1,4 +1,8 @@
-
+import sys
+import os
+current_directory = os.getcwd()
+parent_directory = os.path.dirname(current_directory)
+sys.path.append(parent_directory)
 from collections import namedtuple
 
 stats = namedtuple("stats", "strength, charisma, intelligence, perception")
@@ -41,5 +45,3 @@ class Journey():
 
     def progress_plot(self):
         self.progress = += 1
-
-    

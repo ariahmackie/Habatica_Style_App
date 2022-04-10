@@ -1,4 +1,10 @@
-# code to import from different directories
+import sys
+import os
+current_directory = os.getcwd()
+parent_directory = os.path.dirname(current_directory)
+sys.path.append(parent_directory)
+
+
 from Model.player import Player, Task
 
 def create_test_user1():

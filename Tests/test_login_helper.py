@@ -1,3 +1,4 @@
+
 import sys
 import os
 current_directory = os.getcwd()
@@ -16,7 +17,7 @@ class TestLoginHelper(unittest.TestCase):
             print("==========================")
             db.drop_all_tables()
             self.set_up_existing_players()
-            
+
 
         def set_up_existing_players(self):
             db.create_player_table()
