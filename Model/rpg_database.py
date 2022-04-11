@@ -30,9 +30,9 @@ def create_player_table():
     charisma INTEGER NOT NULL,
     image BLOB);''')
 
-def add_new_player( email, username, password):
+def add_new_player(player_tuple):
+    # player_tuple = (email, username, password, isloggedin, level, coins, experience, health, strength, perception, intelligence, charisma)
     command = "INSERT INTO Player (email, username, password, isloggedin, level, coins, experience, health, strength, perception, intelligence, charisma) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )"
-    player_tuple = (email, username, password, 1, 1, 100, 0, 100, 0, 0, 0, 0)
     cursor.execute(command, player_tuple)
 
 def get_player(id):

@@ -1,0 +1,4 @@
+Messed up email class and smtlib.
+.pyc files hold prior information like date when it was run.
+
+Delete .pyc files

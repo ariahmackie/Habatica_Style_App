@@ -1,11 +1,10 @@
 
 import sys
 import os
+
 current_directory = os.getcwd()
 parent_directory = os.path.dirname(current_directory)
 sys.path.append(parent_directory)
-
-
 
 import unittest
 import Helpers.login_helper as lh
@@ -18,12 +17,10 @@ class TestLoginHelper(unittest.TestCase):
             db.drop_all_tables()
             self.set_up_existing_players()
 
-
         def set_up_existing_players(self):
             db.create_player_table()
             player1 = Player("adam@gmail.com", "adam", "abcdefghi123")
             player2 = Player("sam@gmail.com", "sam", "abcdefghi123")
-
 
         def test_is_valid_new_account_info(self):
             bad_username = "adam" # already in database
@@ -43,7 +40,6 @@ class TestLoginHelper(unittest.TestCase):
             self.assertEqual(is_valid, False, "password is wrong")
             is_valid = lh.is_valid_new_account_info(good_username, good_email, good_password)
             self.assertEqual(is_valid, True, "password is good")
-
 
         def test_is_available_username(self):
             is_available = lh.is_available_username("adam") # should not be available
@@ -95,17 +91,26 @@ class TestLoginHelper(unittest.TestCase):
             self.assertEqual(is_valid, True, "password matches user email")
 
         def test_get_registered_player_via_username(self):
-            player_id = lh.get_registered_player_via_username("adam")
+            player = lh.get_registered_player_via_username("adam")
+            if player is not None:
+                player_id = player[0]
+            else:
+                player_id = None
             expected_id = 1
             self.assertEqual(player_id, expected_id, "should return first user")
 
         def test_get_registered_player_via_email(self):
-            player_id = lh.get_registered_player_via_email("adam@gmail.com")
+            player = lh.get_registered_player_via_email("adam@gmail.com")
+            print(player)
+            if player is not None:
+                player_id = player[0]
+            else:
+                player_id = None
             expected_id = 1
             self.assertEqual(player_id, expected_id, "should return first user")
             non_existing_player_id = lh.get_registered_player_via_email("john@gmail.com")
-            expected_id = 0
-            self.assertEqual(non_existing_player_id, expected_id, "should return 0 when the player email does not exist")
+            expected_id = None
+            self.assertEqual(non_existing_player_id, expected_id, "should return None when the player email does not exist")
 
         def test_is_correct_password_for_current_player(self):
             pass

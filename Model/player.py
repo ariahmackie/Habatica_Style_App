@@ -8,20 +8,56 @@ sys.path.append(parent_directory)
 
 import datetime
 from Model import rpg_database as db
+from Helpers import login_helper as lh
 
 class Player:
     def __init__(self, email, username, password):
-        self.player_account = Account(email, username, password)
-        self.tasklist = []
-        self.coins = 0
+        if self.is_existing_player(email, username):
+            player = lh.get_registered_player_via_email(email)
+            self.set_up_existing_player(player)
+        else:
+            self.set_up_new_player(email, username, password)
+
+    def is_existing_player(self, email, username):
+        player_with_email = lh.get_registered_player_via_email(email)
+        player_with_username = lh.get_registered_player_via_username(username)
+        if player_with_email is not None and player_with_username is not None:
+            if player_with_email == player_with_email:
+                return True
+        return False
+
+    def set_up_existing_player(self, player_tuple):
+        print("setting up existing player")
+        # player_tuple (email, username, password, isloggedin, level, coins, experience, health, strength, perception, intelligence, charisma)
+        self.email = player[0]
+        self.username = player[1]
+        self.password = player[2]
+        self.isloggedin = 1
+        self.level = player[4]
+        self.coins = player[5]
+        self.experience = player[6]
+        self.health = player[7]
+        self.strength = player[8]
+        self.perception = player[9]
+        self.intelligence = player[10]
+        self.charisma = player[11]
+
+    def set_up_new_player(self, email, username, password):
+        self.email = email
+        self.username = username
+        self.password = password
+        self.isloggedin = 1
         self.level = 0
-        self.backpack = Backpack()
+        self.coins = 0
         self.experience = 0
+        self.health = 100
         self.strength = 0
         self.perception = 0
         self.intelligence = 0
         self.charisma = 0
-        db.add_new_player(email, username, password)
+        player_tuple = (self.email, self.username, self.password, self.isloggedin, self.level, self.coins, self.experience, self.health, self.strength, self.perception, self.intelligence, self.charisma)
+        db.add_new_player(player_tuple)
+        self.backpack = Backpack()
 
     def add_to_experience(self, task):
         self.experience += int(task.taskvalue)
@@ -60,20 +96,6 @@ class CustomException:
                 return "Error raised: {0}".format(self.message)
             else:
                 return "Custom Exception Raised"
-
-class Account:
-    def __init__(self, email, username, password):
-        self.email = email
-        self.username = username
-        self.password = password
-        self.isloggedin = False
-
-    def login(self):
-        self.isloggedin = True
-
-    def logout(self):
-        self.isloggedin = False
-
 
 class Backpack():
     def __init__(self):
