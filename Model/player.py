@@ -22,7 +22,7 @@ class Player:
         player_with_email = lh.get_registered_player_via_email(email)
         player_with_username = lh.get_registered_player_via_username(username)
         if player_with_email is not None and player_with_username is not None:
-            if player_with_email == player_with_email:
+            if player_with_email == player_with_username:
                 return True
         return False
 
@@ -41,8 +41,10 @@ class Player:
         self.perception = player[9]
         self.intelligence = player[10]
         self.charisma = player[11]
+        self.player_id = self.__get_player_id__()
 
     def set_up_new_player(self, email, username, password):
+        print("setting up new player")
         self.email = email
         self.username = username
         self.password = password
@@ -57,7 +59,13 @@ class Player:
         self.charisma = 0
         player_tuple = (self.email, self.username, self.password, self.isloggedin, self.level, self.coins, self.experience, self.health, self.strength, self.perception, self.intelligence, self.charisma)
         db.add_new_player(player_tuple)
+        self.player_id = self.__get_player_id__()
         self.backpack = Backpack()
+
+    def __get_player_id__(self):
+        player_tuple = lh.get_registered_player_via_email(self.email)
+        player_id = player_tuple[0]
+        return player_id
 
     def add_to_experience(self, task):
         self.experience += int(task.taskvalue)
@@ -65,10 +73,10 @@ class Player:
             self.experience = self.experience - 15
             self.level_up_player()
 
-    def add_to_tasklist(self, newtask):
+    def add_task(self, description, duedate = datetime.date.today(), taskvalue = 1, is_repeatable = False):
         self.tasklist.append(newtask)
 
-    def subtract_from_tasklist(self, deleted_task):
+    def delete_task(self, deleted_task):
         self.tasklist.remove(deleted_task)
 
     def add_coins(self, num_of_coins):
@@ -144,7 +152,6 @@ class Backpack():
         return backpack_list
 
 class Task:
-
     def __init__(self, description, duedate = datetime.date.today(), taskvalue = 1, is_repeatable = False):
         self.description = description
         self.duedate = duedate

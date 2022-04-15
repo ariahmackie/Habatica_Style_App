@@ -14,6 +14,7 @@ cursor = connection.cursor()
 
 #--------------------- PLAYER TABLE------------------------------------------------------------------
 def create_player_table():
+    print("create_player_table()")
     cursor.execute('''CREATE TABLE Player(
     id INTEGER PRIMARY KEY,
     email TEXT NOT NULL,
@@ -31,9 +32,11 @@ def create_player_table():
     image BLOB);''')
 
 def add_new_player(player_tuple):
+    print("add_new_player()")
     # player_tuple = (email, username, password, isloggedin, level, coins, experience, health, strength, perception, intelligence, charisma)
     command = "INSERT INTO Player (email, username, password, isloggedin, level, coins, experience, health, strength, perception, intelligence, charisma) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )"
     cursor.execute(command, player_tuple)
+    print_player_table()
 
 def get_player(id):
     cursor.execute("SELECT * FROM Player where id =%d" % id)
@@ -44,7 +47,6 @@ def find_player_with_feature(feature_type, value):
     cursor.execute("SELECT * From player where %s=?" % feature_type, (value,))
     player = cursor.fetchone()
     return player
-
 
 def get_value_from_player(value_type, player_id):
     command = "SELECT %s FROM Player WHERE id=?" % value_type
@@ -75,7 +77,6 @@ def increase_health(player_id, value):
         health = health + value
     change_value_in_player("health", health, player_id)
 
-
 def decrease_health(player_id, value):
     health = get_value_from_player("health", player_id)
     if health - value <= 0:
@@ -89,13 +90,14 @@ def drop_player_table():
     cursor.execute('DROP TABLE IF EXISTS Player')
 
 def print_player_table():
-    print("Player Table")
-    player_tuple = ("id", 'email', "username", "password", "isloggedin", "level", "coins", "experience", "strength", "perception", "intelligence", "charisma", "image")
+    print("print_player_table()")
+    player_tuple = ('email', "username", "password", "isloggedin", "level", "coins", "experience", "health", "strength", "perception", "intelligence", "charisma")
     print(player_tuple)
     data = cursor.execute("SELECT * From Player")
     for i in data:
         print(i)
     print("")
+    print("---------------")
 
 #-----------------------------INVENTORY TABLE ---------------------------------------------------------------
 def create_inventory_table():
@@ -275,6 +277,7 @@ def print_task_table():
 
 #--------------------All Tables ---------------------
 def drop_all_tables():
+    print("drop_all_tables")
     drop_player_table()
     drop_inventory_table()
     drop_task_table()
@@ -286,8 +289,6 @@ def create_all_tables():
     create_task_table()
     create_player_table()
 
-
 def close_connection():
     cursor.close()
     connection.close()
-#------------------TEST FUNCTIONS -----------------------
